@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author lanwen (Merkushev Kirill)
  */
-public class CoverageStatusResultSourceStepTests {
+public class CoverageStatusResultSourceStepTest {
 
     @Rule
     public JenkinsRule jRule = new JenkinsRule();
@@ -73,7 +73,7 @@ public class CoverageStatusResultSourceStepTests {
 
     private LogTaskListener listener() {
         return new LogTaskListener(Logger.getLogger(
-                CoverageStatusResultSourceStepTests.class.getCanonicalName()), Level.INFO
+                CoverageStatusResultSourceStepTest.class.getCanonicalName()), Level.INFO
         );
     }
 }
