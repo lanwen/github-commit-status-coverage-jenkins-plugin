@@ -1,9 +1,18 @@
 ## Reports coverage as status
 
-Based on jacoco and github plugin. Requires Jacoco publisher enabled to work
+![Status](doc/img/status.png)
 
+Based on jacoco action and GitHub plugin's `commit status (universal)` step extension model. 
 
-## Generated Job DSL example
+Requires:
+ - GitHub Plugin > `1.19.0`
+ - Jacoco publisher enabled
+
+## Setup
+
+![Setup](doc/img/settings.png)
+
+### Generated Job DSL example
 
 ```groovy
         publishers {
@@ -41,3 +50,8 @@ Based on jacoco and github plugin. Requires Jacoco publisher enabled to work
              mailer('some@mail.dot', false, true)
          }
 ```
+
+## Get it
+
+Hosted on [Jucies](https://github.com/jucies/releases)
+
