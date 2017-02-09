@@ -31,19 +31,20 @@
 
     <name>Coverage reporter</name>
     <description>Reports coverage as status</description>
-    <url>https://github.yandex-team.ru/testpers</url>
+    <url>https://github.com/lanwen/github-status-jacoco-coverage-jenkins-plugin</url>
 
     <developers>
         <developer>
             <id>lanwen</id>
             <name>Merkushev Kirill</name>
-            <email>lanwen@yandex-team.ru</email>
+            <email>lanwen@yandex.ru</email>
         </developer>
     </developers>
+
     <scm>
-        <url>https://github.yandex-team.ru/testpers/report-to-disk-uploader</url>
-        <connection>scm:git:git@github.yandex-team.ru:testpers/report-to-disk-uploader.git</connection>
-        <developerConnection>scm:git:git@github.yandex-team.ru:testpers/report-to-disk-uploader.git
+        <url>https://github.com/lanwen/github-status-jacoco-coverage-jenkins-plugin</url>
+        <connection>scm:git:git@github.com:lanwen/github-status-jacoco-coverage-jenkins-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:lanwen/github-status-jacoco-coverage-jenkins-plugin.git
         </developerConnection>
         <tag>HEAD</tag>
     </scm>
