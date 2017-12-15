@@ -2,11 +2,11 @@
 
 ![Status](doc/img/status.png)
 
-Based on jacoco action and GitHub plugin's `commit status (universal)` step extension model. 
+Based on jacoco/cobertura action and GitHub plugin's `commit status (universal)` step extension model.
 
 Requires:
  - GitHub Plugin > `1.19.0`
- - Jacoco publisher enabled
+ - Jacoco or Cobertura publisher enabled
 
 ## Setup
 
@@ -41,7 +41,8 @@ Requires:
                  }
  
                  statusResultSource {
-                     coverageStatusResultSource {
+                     jacocoCoverageStatusResultSource {
+                     // or coberturaCoverageStatusResultSource {
                          baseJob('master_job')
                      }
                  }
