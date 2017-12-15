@@ -1,11 +1,9 @@
 package org.jenkinsci.plugins.github.status.sources;
 
-import hudson.Extension;
-import hudson.model.Descriptor;
+import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import hudson.plugins.jacoco.JacocoBuildAction;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.github.extension.status.GitHubStatusResultSource;
 import org.kohsuke.github.GHCommitState;
@@ -13,7 +11,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
@@ -22,50 +19,45 @@ import static java.util.Optional.ofNullable;
 /**
  * @author lanwen (Merkushev Kirill)
  */
-public class CoverageStatusResultSource extends GitHubStatusResultSource {
-
-    public static final String LOG_PREFIX = "[GitHub Coverage Status Setter]";
+public abstract class BaseCoverageStatusResultSource<T extends Action> extends GitHubStatusResultSource {
 
     private String baseJob;
+    private String logPrefix;
 
-    @DataBoundConstructor
-    public CoverageStatusResultSource() {
-    }
-
-    public String getBaseJob() {
-        return baseJob;
-    }
-
-    @DataBoundSetter
-    public void setBaseJob(String baseJob) {
+    public BaseCoverageStatusResultSource(String baseJob, String logPrefix) {
         this.baseJob = baseJob;
+        this.logPrefix = logPrefix;
     }
+
+    protected abstract T coverageActionFrom(Run<?, ?> run);
+
+    protected abstract float lineCoverage(T action);
 
     @Override
-    public StatusResult get(@Nonnull Run<?, ?> run, @Nonnull TaskListener taskListener) throws IOException {
+    public StatusResult get(@Nonnull Run<?, ?> run, @Nonnull TaskListener taskListener) {
         Job base = Jenkins.getInstance().getItemByFullName(baseJob, Job.class);
         requireNonNull(base, () -> String.format("Job with name [ %s ] not found", baseJob));
 
-        JacocoBuildAction current = run.getAction(JacocoBuildAction.class);
+        T current = coverageActionFrom(run);
 
         if (isNull(current)) {
-            taskListener.error("%s Current coverage unknown", LOG_PREFIX);
+            taskListener.error("%s Current coverage unknown", logPrefix);
             return new StatusResult(GHCommitState.ERROR, "Current coverage unknown");
         }
 
-        float currentLineCoverage = current.getLineCoverage().getPercentageFloat();
+        float currentLineCoverage = lineCoverage(current);
 
-        JacocoBuildAction baseCoverage = ofNullable(base.getLastSuccessfulBuild())
-                .map(last -> last.getAction(JacocoBuildAction.class))
+        T baseCoverage = ofNullable(base.getLastSuccessfulBuild())
+                .map(this::coverageActionFrom)
                 .orElse(null);
 
         if (isNull(baseCoverage)) {
             String coverage = String.format("%.2f%% (base unknown)", currentLineCoverage);
-            taskListener.error("%s Base coverage unknown, use only current - %s", LOG_PREFIX, coverage);
+            taskListener.error("%s Base coverage unknown, use only current - %s", logPrefix, coverage);
             return new StatusResult(GHCommitState.ERROR, coverage);
         }
 
-        float baseLineCoverage = baseCoverage.getLineCoverage().getPercentageFloat();
+        float baseLineCoverage = lineCoverage(baseCoverage);
 
         GHCommitState state = from(baseLineCoverage, currentLineCoverage);
         String message = String.format(
@@ -73,7 +65,7 @@ public class CoverageStatusResultSource extends GitHubStatusResultSource {
                 currentLineCoverage,
                 currentLineCoverage - baseLineCoverage
         );
-        taskListener.getLogger().printf("%s Reporting: %s - %s%n", LOG_PREFIX, state, message);
+        taskListener.getLogger().printf("%s Reporting: %s - %s%n", logPrefix, state, message);
         return new StatusResult(state, message);
     }
 
@@ -83,14 +75,5 @@ public class CoverageStatusResultSource extends GitHubStatusResultSource {
         }
 
         return GHCommitState.FAILURE;
-    }
-
-
-    @Extension(optional = true)
-    public static class CoverageStatusResultSourceDescriptor extends Descriptor<GitHubStatusResultSource> {
-        @Override
-        public String getDisplayName() {
-            return "Coverage status";
-        }
     }
 }
