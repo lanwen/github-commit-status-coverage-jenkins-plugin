@@ -36,7 +36,7 @@ public class JacocoCoverageStatusResultSource extends GitHubStatusResultSource {
 
     @Override
     public StatusResult get(@Nonnull Run<?, ?> run, @Nonnull TaskListener taskListener) {
-        return new CoverageStatusResultSource<JacocoBuildAction>(baseJob, LOG_PREFIX) {
+        return new BaseCoverageStatusResultSource<JacocoBuildAction>(baseJob, LOG_PREFIX) {
             @Override
             protected JacocoBuildAction coverageActionFrom(Run<?, ?> run) {
                 return run.getAction(JacocoBuildAction.class);

@@ -36,7 +36,7 @@ public class CoberturaCoverageStatusResultSource extends GitHubStatusResultSourc
 
     @Override
     public StatusResult get(@Nonnull Run<?, ?> run, @Nonnull TaskListener taskListener) {
-        return new CoverageStatusResultSource<CoberturaBuildAction>(baseJob, LOG_PREFIX) {
+        return new BaseCoverageStatusResultSource<CoberturaBuildAction>(baseJob, LOG_PREFIX) {
             @Override
             protected CoberturaBuildAction coverageActionFrom(Run<?, ?> run) {
                 return run.getAction(CoberturaBuildAction.class);

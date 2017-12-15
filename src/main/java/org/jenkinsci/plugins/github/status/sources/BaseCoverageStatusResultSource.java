@@ -19,12 +19,12 @@ import static java.util.Optional.ofNullable;
 /**
  * @author lanwen (Merkushev Kirill)
  */
-public abstract class CoverageStatusResultSource<T extends Action> extends GitHubStatusResultSource {
+public abstract class BaseCoverageStatusResultSource<T extends Action> extends GitHubStatusResultSource {
 
     private String baseJob;
     private String logPrefix;
 
-    public CoverageStatusResultSource(String baseJob, String logPrefix) {
+    public BaseCoverageStatusResultSource(String baseJob, String logPrefix) {
         this.baseJob = baseJob;
         this.logPrefix = logPrefix;
     }
