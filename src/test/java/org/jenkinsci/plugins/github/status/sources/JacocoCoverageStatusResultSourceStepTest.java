@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author lanwen (Merkushev Kirill)
  */
-public class CoverageStatusResultSourceStepTest {
+public class JacocoCoverageStatusResultSourceStepTest {
 
     @Rule
     public JenkinsRule jRule = new JenkinsRule();
@@ -57,7 +57,7 @@ public class CoverageStatusResultSourceStepTest {
         ));
 
 
-        CoverageStatusResultSource cov = new CoverageStatusResultSource();
+        JacocoCoverageStatusResultSource cov = new JacocoCoverageStatusResultSource();
         cov.setBaseJob("1");
 
         GitHubStatusResultSource.StatusResult result = cov.get(run, listener());
@@ -73,7 +73,7 @@ public class CoverageStatusResultSourceStepTest {
 
     private LogTaskListener listener() {
         return new LogTaskListener(Logger.getLogger(
-                CoverageStatusResultSourceStepTest.class.getCanonicalName()), Level.INFO
+                JacocoCoverageStatusResultSourceStepTest.class.getCanonicalName()), Level.INFO
         );
     }
 }
